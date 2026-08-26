@@ -1,0 +1,8 @@
+out("这是普通输出", info)
+outGUI("这是带图标的信息", info)
+outGUI("这是带图标的警告", warning)
+outGUI("这是带图标的错误", error)
+outGUI("这是调试信息，打印到终端", debug)
+let name = in("请输入你的名字：")
+out("你好，" + name)
+run_for_gui()
