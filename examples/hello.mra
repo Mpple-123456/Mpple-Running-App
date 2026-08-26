@@ -1,0 +1,14 @@
+set num a = 123.456
+set char b = 'a'
+set string c = "rfhsj"
+out(a)
+out(b)
+out(c)
+
+let x = 10
+let y = 3.5
+out("x + y = " + (x + y))
+
+out("请输入你的名字：", info)
+let name = in()
+out("你好，" + name)
