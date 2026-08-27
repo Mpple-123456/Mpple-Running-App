@@ -1,0 +1,6 @@
+set num counter = 0
+while (counter < 5) {
+    out("当前计数：" + counter)
+    counter = counter + 1
+}
+out("循环结束")
