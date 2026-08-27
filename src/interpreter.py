@@ -276,22 +276,19 @@ class Interpreter:
         self._setup_builtins()
 
     def _setup_builtins(self):
-        import tkinter as tk
-        from tkinter import messagebox, simpledialog
+        config = get_config()
+        prefixes = config.get("prefix_style", {
+            "warning": "[WARNING] ",
+            "error": "[ERROR] ",
+            "success": "[SUCCESS] ",
+            "debug": "[DEBUG] ",
+        })
 
-        # out 函数
         def builtin_out(text, msg_type="info"):
             text = str(text)
             msg_type = str(msg_type).lower()
-            prefixes = {
-                "warning": "[WARNING] ",
-                "error": "[ERROR] ",
-                "success": "[SUCCESS] ",
-                "debug": "[DEBUG] ",
-            }
             prefix = prefixes.get(msg_type, "")
             formatted = prefix + text
-
             if self.gui_mode:
                 # GUI 模式：弹出 messagebox（不带图标）
                 root = tk.Tk()

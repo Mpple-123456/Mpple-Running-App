@@ -1,0 +1,11 @@
+{
+  "language": "en",
+  "gui_default": false,
+  "log_level": "info",
+  "prefix_style": {
+    "warning": "[WARNING] ",
+    "error": "[ERROR] ",
+    "success": "[SUCCESS] ",
+    "debug": "[DEBUG] "
+  }
+}
