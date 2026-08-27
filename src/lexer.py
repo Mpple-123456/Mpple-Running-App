@@ -1,12 +1,18 @@
 import re
+from src.errors import get_error_message
 
 def lex(code):
     tokens = []
     i = 0
     while i < len(code):
-        # 跳过空白字符
         if code[i].isspace():
             i += 1
+            continue
+
+        # 单行注释
+        if code[i] == '/' and i + 1 < len(code) and code[i+1] == '/':
+            while i < len(code) and code[i] != '\n':
+                i += 1
             continue
 
         # 括号和结构符号
@@ -65,7 +71,7 @@ def lex(code):
             if i + 1 < len(code) and code[i+1] == '=':
                 tokens.append(('NEQ', '!=')); i += 2
             else:
-                raise SyntaxError("无法识别的字符: '!' (应为 '!=')")
+                raise SyntaxError(get_error_message("unrecognized_char", char=code[i]))
 
         # 双引号字符串
         elif code[i] == '"':
@@ -73,7 +79,7 @@ def lex(code):
             while j < len(code) and code[j] != '"':
                 j += 1
             if j >= len(code):
-                raise SyntaxError("未闭合的字符串")
+                raise SyntaxError(get_error_message("unclosed_string"))
             tokens.append(('STRING', code[i+1:j])); i = j + 1
 
         # 单引号字符
@@ -82,31 +88,31 @@ def lex(code):
             while j < len(code) and code[j] != "'":
                 j += 1
             if j >= len(code):
-                raise SyntaxError("未闭合的字符字面量")
+                raise SyntaxError(get_error_message("unclosed_char"))
             char_value = code[i+1:j]
             if len(char_value) != 1:
-                raise SyntaxError("字符字面量必须恰好包含一个字符")
+                raise SyntaxError(get_error_message("invalid_char_literal"))
             tokens.append(('CHAR', char_value)); i = j + 1
 
-        # 数字（整数或浮点数）
+        # 数字
         elif code[i].isdigit() or (code[i] == '.' and i + 1 < len(code) and code[i+1].isdigit()):
             j = i
             while j < len(code) and (code[j].isdigit() or code[j] == '.'):
                 j += 1
             num_str = code[i:j]
             if num_str.count('.') > 1:
-                raise SyntaxError(f"无效的数字: {num_str}")
+                raise SyntaxError(get_error_message("invalid_number", number=num_str))
             if '.' in num_str:
                 tokens.append(('FLOAT', float(num_str)))
             else:
                 tokens.append(('INTEGER', int(num_str)))
             i = j
 
-        # 标识符或关键字
+        # 标识符和关键字
         else:
             m = re.match(r'[a-zA-Z_][a-zA-Z0-9_]*', code[i:])
             if not m:
-                raise SyntaxError(f"无法识别的字符: {code[i]}")
+                raise SyntaxError(get_error_message("unrecognized_char", char=code[i]))
             word = m.group(0)
             keywords = {
                 'set': 'SET',
@@ -115,7 +121,7 @@ def lex(code):
                 'string': 'TYPE_STRING',
                 'let': 'LET',
                 'for': 'FOR',
-                'while': 'WHILE'      # 新增
+                'while': 'WHILE'
             }
             token_type = keywords.get(word, 'IDENTIFIER')
             tokens.append((token_type, word))

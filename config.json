@@ -7,5 +7,13 @@
     "error": "[ERROR] ",
     "success": "[SUCCESS] ",
     "debug": "[DEBUG] "
+  },
+  "return_format": {
+    "enabled": true,
+    "prefix": "Return: ",
+    "success_text": {
+      "zh": "成功",
+      "en": "Success"
+    }
   }
 }

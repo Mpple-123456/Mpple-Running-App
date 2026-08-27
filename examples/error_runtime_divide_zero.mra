@@ -1,0 +1,2 @@
+set num x = 10 / 0
+out(x)

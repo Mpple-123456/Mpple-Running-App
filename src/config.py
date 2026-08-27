@@ -1,4 +1,3 @@
-# src/config.py
 import json
 
 DEFAULT_CONFIG = {
@@ -10,6 +9,14 @@ DEFAULT_CONFIG = {
         "error": "[ERROR] ",
         "success": "[SUCCESS] ",
         "debug": "[DEBUG] "
+    },
+    "return_format": {
+        "enabled": True,
+        "prefix": "Return: ",
+        "success_text": {
+            "zh": "成功",
+            "en": "Success"
+        }
     }
 }
 
