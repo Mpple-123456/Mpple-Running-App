@@ -40,3 +40,7 @@ class ForLoop:
         self.condition = condition      # 条件表达式（AST 节点）
         self.update_expr = update_expr  # 更新表达式（Assignment 或 BinaryOp）
         self.body = body                # 循环体语句列表（list of AST 节点）
+class WhileLoop:
+    def __init__(self, condition, body):
+        self.condition = condition   # 条件表达式（AST 节点）
+        self.body = body             # 循环体语句列表（list of AST 节点）

@@ -26,6 +26,8 @@ class Parser:
                 statements.append(self.parse_typed_assignment())
             elif self.peek()[0] == 'FOR':
                 statements.append(self.parse_for())
+            elif self.peek()[0] == 'WHILE':
+                statements.append(self.parse_while())
             else:
                 statements.append(self.parse_expression())
         return statements
@@ -142,6 +144,36 @@ class Parser:
                 body.append(self.parse_expression())
         self.consume('RBRACE')
         return ForLoop(init_stmt, condition, update_expr, body)
+    def parse_while(self):
+        self.consume('WHILE')
+        self.consume('LPAREN')
+        condition = self.parse_expression()
+        self.consume('RPAREN')
+        self.consume('LBRACE')
+        body = []
+        while self.peek()[0] != 'RBRACE':
+            if self.peek()[0] == 'LET':
+                body.append(self.parse_assignment())
+            elif self.peek()[0] == 'SET':
+                body.append(self.parse_typed_assignment())
+            elif self.peek()[0] == 'FOR':
+                body.append(self.parse_for())
+            elif self.peek()[0] == 'WHILE':
+                body.append(self.parse_while())
+            elif self.peek()[0] == 'IDENTIFIER':
+                # 检查下一个 token 是否为 EQUALS，是则解析为普通赋值语句
+                if self.pos + 1 < len(self.tokens) and self.tokens[self.pos + 1][0] == 'EQUALS':
+                    # 普通赋值： name = expr
+                    name = self.consume('IDENTIFIER')[1]
+                    self.consume('EQUALS')
+                    expr = self.parse_expression()
+                    body.append(Assignment(name, expr))
+                else:
+                    body.append(self.parse_expression())
+            else:
+                body.append(self.parse_expression())
+        self.consume('RBRACE')
+        return WhileLoop(condition, body)
     def parse_update(self):
         """
         解析 for 循环的更新部分，支持：

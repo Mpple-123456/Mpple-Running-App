@@ -210,6 +210,14 @@ class Interpreter:
                 # 执行更新
                 self.evaluate(node.update_expr)
             return None
+        elif isinstance(node, WhileLoop):
+            while True:
+                cond = self.evaluate(node.condition)
+                if not cond:
+                    break
+                for stmt in node.body:
+                    self.evaluate(stmt)
+            return None
         else:
             raise RuntimeError(f"未知节点类型: {type(node)}")
 

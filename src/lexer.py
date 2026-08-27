@@ -114,7 +114,8 @@ def lex(code):
                 'char': 'TYPE_CHAR',
                 'string': 'TYPE_STRING',
                 'let': 'LET',
-                'for': 'FOR'
+                'for': 'FOR',
+                'while': 'WHILE'      # 新增
             }
             token_type = keywords.get(word, 'IDENTIFIER')
             tokens.append((token_type, word))
